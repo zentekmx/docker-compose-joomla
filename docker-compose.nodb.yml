@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  openldap:
+    image: zentekmx/openldap:latest
+    ports:
+    - "389:389"
+    volumes:
+    - ${OPENLDAP_VOLUME:-openldap-volume}:/var/lib/ldap:Z
+
+  joomla:
+    image: joomla
+    ports:
+    - 8080:80
+    environment:
+    - JOOMLA_DB_HOST=${MYSQL_HOST}
+    - JOOMLA_DB_PASSWORD=${MYSQL_PASSWORD}
+    volumes:
+    - ${JOOMLA_VOLUME:-joomla-volume}:/var/www/html
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:4.8
+    ports:
+    - "8090:80"
+    environment:
+    - PMA_HOST=${MYSQL_HOST}
+
+volumes:
+  openldap-volume:
+  mysql-volume:
+  joomla-volume:
